@@ -1,0 +1,1 @@
+FRedMoney = FRedMoney or {}
