@@ -12,8 +12,6 @@ FRedMoney.Config.NPCModel = "models/player/Group03/female_01.mdl" -- model of th
 
 FRedMoney.Config.RateRefreshTime = 20 -- how often the tax rate refreshes
 
-FRedMoney.Config.OverwriteDarkRPFunction = true -- overwrites addMoney so it adds redmoney instead
-
 FRedMoney.Config.Debug = false -- Debug
 
 FRedMoney.Config.DefaultHud = true -- basic hud
