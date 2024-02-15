@@ -5,29 +5,35 @@ include("shared.lua")
 function ENT:Initialize()
 	self:SetModel(FRedMoney.Config.NPCModel or "models/player/Group03/female_01.mdl")
 	self:PhysicsInit(SOLID_VPHYSICS)
-	self:SetMoveType(MOVETYPE_VPHYSICS)
-	self:SetSolid(SOLID_VPHYSICS)
-	self:GetPhysicsObject():Wake()
-	self:SetUseType(SIMPLE_USE)
-	self:GetPhysicsObject():EnableMotion(false)
-	self.Owner = self:CPPIGetOwner()
+	self:SetSolid(SOLID_BBOX)
+    self.NextThink = CurTime()
+    self:SetRate(math.floor(math.random(FRedMoney.Config.RedMoneyRates["min"], FRedMoney.Config.RedMoneyRates["max"])))
 end
 
-function ENT:Use(p)
+function function ENT:AcceptInput(i,p,a,z)
+    if not IsFirstTimePredicted() then return end
     local amt = p:GetRedMoney()
     if not amt then
+        if not IsFirstTimePredicted() then return end
         p:ChatPrint('[RedMoney] : Error, Fetching Data.')
     end
 
-    local percent = 
+    local percent = self:GetRate()
+
+    if percent > 0 and amt >= 0 then
+        if not IsFirstTimePredicted() then return end
+        local amount = DarkRP.formatMoney(math.floor(amt - (amt * (percent / 100))))
+        p:ChatPrint("Here is your $" .. amount .. " after my tax")-- debugging 
+        p:SetRedMoney(0)
+        FRedMoney.PayoutPlayer(p, math.floor(amt - (amt * (percent / 100))))
+    end
+
+    if amt <= 0 then
+        if not IsFirstTimePredicted() then return end
+        p:ChatPrint('[RedMoney] : Error You Have No Red Money')
+        return false 
+    end
 
 end
 
-function ENT:Think()
-    local time = CurTime()
-    if self.NextThink and self.NextThink > time then return end
-
-    self:SetNWVar("RedMoney", math.floor(math.random(FRedMoney.Config.RedMoneyRates["min"], FRedMoney.Config.RedMoneyRates["max"])))
-
-    self.NextThink = time + FRedMoney.Config.RateRefreshTime
-end
+-- fml omfg
