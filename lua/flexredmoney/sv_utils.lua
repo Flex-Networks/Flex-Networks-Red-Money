@@ -9,6 +9,13 @@ function PLAYER:TakeRedMoney(amount)
     self:SetNWInt("RedMoney", self:GetNWInt("RedMoney") - amount)
 end
 
+if FRedMoney.Config.OverwriteDarkRPFunction then
+    function PLAYER:addMoney(amount)
+        FRedMoney:DebugPrint("Added Red money to" .. self:Nick() .. " @ " .. amount .. "\n RedMoney - sv_utils.lua : 7")
+        self:AddRedMoney(amount)
+    end
+end
+
 function PLAYER:SetRedMoney(amount)
     self:SetNWInt("RedMoney", amount)
 end
