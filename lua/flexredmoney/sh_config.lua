@@ -17,3 +17,5 @@ FRedMoney.Config.Debug = false -- Debug
 FRedMoney.Config.DefaultHud = true -- basic hud
 
 --  PLAYER:GetRedMoney() -- is how to get redmoney 
+
+FRedMoney.Config.OverwriteDarkRPFunction = true -- overwrites addMoney so it adds redmoney instead
