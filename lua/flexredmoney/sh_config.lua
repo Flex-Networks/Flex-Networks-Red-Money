@@ -14,7 +14,7 @@ FRedMoney.Config.RateRefreshTime = 20 -- how often the tax rate refreshes
 
 FRedMoney.Config.OverwriteDarkRPFunction = true -- overwrites addMoney so it adds redmoney instead
 
-FRedMoney.Config.Debug = true -- Debug
+FRedMoney.Config.Debug = false -- Debug
 
 FRedMoney.Config.DefaultHud = true -- basic hud
 
