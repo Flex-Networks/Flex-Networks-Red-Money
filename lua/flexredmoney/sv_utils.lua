@@ -13,17 +13,15 @@ function PLAYER:SetRedMoney(amount)
     self:SetNWInt("RedMoney", amount)
 end
 
-if FRedMoney.Config.OverwriteDarkRPFunction then
-    function PLAYER:addMoney(amount)
-        FRedMoney:DebugPrint("Added Red money to" .. self:Nick() .. " @ " .. amount .. "\n RedMoney - sv_utils.lua : 7")
-        self:AddRedMoney(amount)
-    end
-end
-
 function FRedMoney.PayoutPlayer(ply, amount)
     if not IsValid(ply) or not ply:IsPlayer() then return end
-    if not number or type(tonumber(amount)) ~= "number" then return end
+    amount = tonumber(amount)
+    if not amount then
+        FRedMoney:DebugPrint("   [FRedMoney.PayoutPlayer]   -> Amount is nil?")
+        return
+    end
     ply:addMoney(amount)
+    hook.Run("FRedMoney.PayOut" , ply , amount) // For logs perchance
 end
 
 function FRedMoney:ChangeTax()
@@ -36,6 +34,7 @@ end
 
 timer.Create("FRedMoney.Config.RateRefreshTime" , FRedMoney.Config.RateRefreshTime or 30 , 0 , function()
 	FRedMoney:ChangeTax()
+    hook.Run("FRedMoney.TaxesUpdated") // For logs perchance
 end)
 
 hook.Add( "PlayerDeath", "FRedMoney.PlayerDeath", function( victim, inflictor, attacker )
@@ -43,5 +42,6 @@ hook.Add( "PlayerDeath", "FRedMoney.PlayerDeath", function( victim, inflictor, a
 	    local money = victim:GetRedMoney()
 	    victim:SetRedMoney(0)
 	    attacker:AddRedMoney(money)
+        hook.Run("FRedMoney.LoseMoneyOnDeath" , victim , attacker , money) // For logs perchance
     end
 end)
