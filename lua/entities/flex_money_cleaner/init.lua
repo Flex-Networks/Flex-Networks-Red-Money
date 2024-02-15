@@ -10,30 +10,34 @@ function ENT:Initialize()
     self:SetRate(math.floor(math.random(FRedMoney.Config.RedMoneyRates["min"], FRedMoney.Config.RedMoneyRates["max"])))
 end
 
-function function ENT:AcceptInput(i,p,a,z)
-    if not IsFirstTimePredicted() then return end
-    local amt = p:GetRedMoney()
-    if not amt then
-        if not IsFirstTimePredicted() then return end
-        p:ChatPrint('[RedMoney] : Error, Fetching Data.')
+function ENT:AcceptInput(i,p,a,z)
+    if IsFirstTimePredicted() and !p._l_asttime then 
+        p._l_asttime = true
+        timer.Simple(1, function()
+            p._l_asttime = false
+        end)
+        local amt = p:GetRedMoney()
+        if not amt then
+            if not IsFirstTimePredicted() then return end
+            p:ChatPrint('[RedMoney] : Error, Fetching Data.')
+        end
+
+        local percent = self:GetRate()
+
+        if percent > 0 and amt >= 0 then
+            if not IsFirstTimePredicted() then return end
+            local amount = DarkRP.formatMoney(math.floor(amt - (amt * (percent / 100))))
+            p:ChatPrint("Here is your " .. amount .. " after my tax")-- debugging 
+            p:SetRedMoney(0)
+            FRedMoney.PayoutPlayer(p, math.floor(amt - (amt * (percent / 100))))
+        end
+
+        if amt <= 0 then
+            if not IsFirstTimePredicted() then return end
+            p:ChatPrint('[RedMoney] : Error You Have No Red Money')
+            return false 
+        end
     end
-
-    local percent = self:GetRate()
-
-    if percent > 0 and amt >= 0 then
-        if not IsFirstTimePredicted() then return end
-        local amount = DarkRP.formatMoney(math.floor(amt - (amt * (percent / 100))))
-        p:ChatPrint("Here is your $" .. amount .. " after my tax")-- debugging 
-        p:SetRedMoney(0)
-        FRedMoney.PayoutPlayer(p, math.floor(amt - (amt * (percent / 100))))
-    end
-
-    if amt <= 0 then
-        if not IsFirstTimePredicted() then return end
-        p:ChatPrint('[RedMoney] : Error You Have No Red Money')
-        return false 
-    end
-
 end
 
 -- fml omfg
