@@ -1,5 +1,3 @@
-FRedMoney = FRedMoney or {}
-
 local PLAYER = FindMetaTable("Player")
 
 function PLAYER:AddRedMoney(amount)
@@ -23,21 +21,9 @@ if FRedMoney.Config.OverwriteDarkRPFunction then
 end
 
 function FRedMoney.PayoutPlayer(ply, amount)
-    if not IsValid(ply) then return end
-    if not amount then return end
-    if not isnumber(amount) then return end
-    if amount < 0 then return end
-
-    amount = DarkRP.toInt(amount)
-    if not amount then return false end
-    local self = ply
-    local total = self:getDarkRPVar("money") + amount
-    total = hook.Call("playerWalletChanged", GAMEMODE, self, amount, self:getDarkRPVar("money")) or total
-
-    self:setDarkRPVar("money", total)
-
-    if self.DarkRPUnInitialized then return end
-    DarkRP.storeMoney(self, total)
+    if not IsValid(ply) or not ply:IsPlayer() then return end
+    if not number or type(tonumber(amount)) ~= "number" then return end
+    ply:addMoney(amount)
 end
 
 function FRedMoney:ChangeTax()
