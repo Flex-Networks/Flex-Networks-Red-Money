@@ -53,7 +53,9 @@ timer.Create("FRedMoney.Config.RateRefreshTime" , FRedMoney.Config.RateRefreshTi
 end)
 
 hook.Add( "PlayerDeath", "FRedMoney.PlayerDeath", function( victim, inflictor, attacker )
-    local money = victim:GetRedMoney()
-    victim:SetRedMoney(0)
-    attacker:AddRedMoney(money)
+    if FRedMoney.Config.LooseWhenDie then
+	    local money = victim:GetRedMoney()
+	    victim:SetRedMoney(0)
+	    attacker:AddRedMoney(money)
+    end
 end)
