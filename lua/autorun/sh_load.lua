@@ -1,4 +1,5 @@
-
+FRedMoney = FredMoney or {}
+FRedMoney.Config = FRedMoney.Config or {}
 function FRedMoney.AddFile(File, dir)
     local fileSide = string.lower(string.Left(File, 3))
     if SERVER and fileSide == "sv_" then
