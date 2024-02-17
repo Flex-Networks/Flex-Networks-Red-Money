@@ -1,27 +1,27 @@
 include("shared.lua")
+surface.CreateFont("Roboto24", {
+    font = "Roboto",
+    size = 24,
+    weight = 1000,
+    antialias = true,
+    shadow = false
+})
+surface.CreateFont("Roboto18", {
+    font = "Roboto",
+    size = 18,
+    weight = 1000,
+    antialias = true,
+    shadow = false
+})
+surface.CreateFont("Roboto14", {
+    font = "Roboto",
+    size = 14,
+    weight = 1000,
+    antialias = true,
+    shadow = false
+})
 
 function ENT:Initialize()
-    surface.CreateFont("Roboto24", {
-        font = "Roboto",
-        size = 24,
-        weight = 1000,
-        antialias = true,
-        shadow = false
-    })
-    surface.CreateFont("Roboto18", {
-        font = "Roboto",
-        size = 18,
-        weight = 1000,
-        antialias = true,
-        shadow = false
-    })
-    surface.CreateFont("Roboto14", {
-        font = "Roboto",
-        size = 14,
-        weight = 1000,
-        antialias = true,
-        shadow = false
-    })
 end
 
 function ENT:Draw()

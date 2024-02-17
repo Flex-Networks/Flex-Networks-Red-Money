@@ -37,11 +37,23 @@ timer.Create("FRedMoney.Config.RateRefreshTime" , FRedMoney.Config.RateRefreshTi
     hook.Run("FRedMoney.TaxesUpdated") // For logs perchance
 end)
 
+function FRedMoney:CreateMoneyModel(position, amount)
+    local ditrymoney_mdl = ents.Create("flex_money_ent")
+    ditrymoney_mdl:SetPos(position)
+    ditrymoney_mdl:SetDirtyMoneyAmount(tostring(amount) or 0)
+    ditrymoney_mdl:Spawn()
+    ditrymoney_mdl:Activate()
+    return ditrymoney_mdl
+end
+
 hook.Add( "PlayerDeath", "FRedMoney.PlayerDeath", function( victim, inflictor, attacker )
     if FRedMoney.Config.LooseWhenDie then
 	    local money = victim:GetRedMoney()
 	    victim:SetRedMoney(0)
-	    attacker:AddRedMoney(money)
-        hook.Run("FRedMoney.LoseMoneyOnDeath" , victim , attacker , money) // For logs perchance
+        if money > 0 then
+            attacker:ChatPrint( victim:Nick() .. " has dropped " .. DarkRP.formatMoney(money) )
+            FRedMoney:CreateMoneyModel(victim:GetPos() + Vector(0, 0, 10) , tostring(money))
+            hook.Run("FRedMoney.LoseMoneyOnDeath" , victim , attacker , money) // For logs perchance
+        end
     end
 end)
